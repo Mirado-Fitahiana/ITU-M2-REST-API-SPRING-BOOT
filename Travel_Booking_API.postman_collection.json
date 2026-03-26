@@ -1,0 +1,745 @@
+{
+  "info": {
+    "name": "Travel Booking API",
+    "description": "Complete collection for the Travel Booking REST API.\n\n## Setup\n1. Import this collection and the environment file `Travel_Booking_API.postman_environment.json`\n2. Run **Login as Admin**, **Login as Customer**, **Login as Agent** — tokens are saved automatically\n3. Use the requests with the matching role\n\n## Test credentials\n- ADMIN    : admin@travel.com / password\n- CUSTOMER : customer@travel.com / password\n- AGENT    : agent@travel.com / password",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url",       "value": "http://localhost:8080" },
+    { "key": "admin_token",    "value": "" },
+    { "key": "customer_token", "value": "" },
+    { "key": "agent_token",    "value": "" }
+  ],
+  "item": [
+
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/auth/register", "host": ["{{base_url}}"], "path": ["api","auth","register"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New User\",\n  \"email\": \"newuser@travel.com\",\n  \"password\": \"password\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login as Admin",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const res = pm.response.json();",
+            "if (res.token) { pm.collectionVariables.set('admin_token', res.token); pm.test('Admin token saved', () => pm.expect(res.token).to.be.a('string')); }"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api","auth","login"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@travel.com\",\n  \"password\": \"password\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login as Customer",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const res = pm.response.json();",
+            "if (res.token) { pm.collectionVariables.set('customer_token', res.token); pm.test('Customer token saved', () => pm.expect(res.token).to.be.a('string')); }"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api","auth","login"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"customer@travel.com\",\n  \"password\": \"password\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Login as Agent",
+          "event": [{ "listen": "test", "script": { "exec": [
+            "const res = pm.response.json();",
+            "if (res.token) { pm.collectionVariables.set('agent_token', res.token); pm.test('Agent token saved', () => pm.expect(res.token).to.be.a('string')); }"
+          ]}}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": { "raw": "{{base_url}}/api/auth/login", "host": ["{{base_url}}"], "path": ["api","auth","login"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"agent@travel.com\",\n  \"password\": \"password\"\n}"
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get All Users [ADMIN]",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/users", "host": ["{{base_url}}"], "path": ["api","users"] }
+          }
+        },
+        {
+          "name": "Get User by ID [ADMIN/self]",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/users/1", "host": ["{{base_url}}"], "path": ["api","users","1"] }
+          }
+        },
+        {
+          "name": "Create User [ADMIN]",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": { "raw": "{{base_url}}/api/users", "host": ["{{base_url}}"], "path": ["api","users"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test User\",\n  \"email\": \"test@travel.com\",\n  \"password\": \"password\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update User [ADMIN]",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": { "raw": "{{base_url}}/api/users/2", "host": ["{{base_url}}"], "path": ["api","users","2"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Customer Updated\",\n  \"email\": \"customer@travel.com\",\n  \"password\": \"password\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete User [ADMIN]",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/users/4", "host": ["{{base_url}}"], "path": ["api","users","4"] }
+          }
+        },
+        {
+          "name": "Get User Dashboard [ADMIN/self]",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{customer_token}}" }],
+            "url": { "raw": "{{base_url}}/api/users/2/dashboard", "host": ["{{base_url}}"], "path": ["api","users","2","dashboard"] }
+          }
+        },
+        {
+          "name": "Get User Payment Summary [ADMIN/self]",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{customer_token}}" }],
+            "url": { "raw": "{{base_url}}/api/users/2/payments/summary", "host": ["{{base_url}}"], "path": ["api","users","2","payments","summary"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Destinations",
+      "item": [
+        {
+          "name": "Get All Destinations",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/destinations", "host": ["{{base_url}}"], "path": ["api","destinations"] }
+          }
+        },
+        {
+          "name": "Get Destination by ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/destinations/1", "host": ["{{base_url}}"], "path": ["api","destinations","1"] }
+          }
+        },
+        {
+          "name": "Create Destination [ADMIN]",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": { "raw": "{{base_url}}/api/destinations", "host": ["{{base_url}}"], "path": ["api","destinations"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Barcelona\",\n  \"country\": \"Spain\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Destination [ADMIN]",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": { "raw": "{{base_url}}/api/destinations/1", "host": ["{{base_url}}"], "path": ["api","destinations","1"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Paris\",\n  \"country\": \"France\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Destination [ADMIN]",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/destinations/4", "host": ["{{base_url}}"], "path": ["api","destinations","4"] }
+          }
+        },
+        {
+          "name": "Get Destination Stats [HATEOAS]",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/destinations/1/stats", "host": ["{{base_url}}"], "path": ["api","destinations","1","stats"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Trips",
+      "item": [
+        {
+          "name": "Get All Trips",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/trips", "host": ["{{base_url}}"], "path": ["api","trips"] }
+          }
+        },
+        {
+          "name": "Get Trips - Filter by destination",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/trips?destination=Paris",
+              "host": ["{{base_url}}"], "path": ["api","trips"],
+              "query": [{ "key": "destination", "value": "Paris" }]
+            }
+          }
+        },
+        {
+          "name": "Get Trips - Filter by price range",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/trips?minPrice=900&maxPrice=1300",
+              "host": ["{{base_url}}"], "path": ["api","trips"],
+              "query": [
+                { "key": "minPrice", "value": "900" },
+                { "key": "maxPrice", "value": "1300" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Trip by ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/trips/1", "host": ["{{base_url}}"], "path": ["api","trips","1"] }
+          }
+        },
+        {
+          "name": "Create Trip [ADMIN/AGENT]",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{agent_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": { "raw": "{{base_url}}/api/trips", "host": ["{{base_url}}"], "path": ["api","trips"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Barcelona Beach Escape\",\n  \"startDate\": \"2026-10-01\",\n  \"endDate\": \"2026-10-07\",\n  \"price\": 850.00,\n  \"destinationId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Trip [ADMIN/AGENT]",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{agent_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": { "raw": "{{base_url}}/api/trips/1", "host": ["{{base_url}}"], "path": ["api","trips","1"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Paris Romantic Getaway - Updated\",\n  \"startDate\": \"2026-06-01\",\n  \"endDate\": \"2026-06-08\",\n  \"price\": 1250.00,\n  \"destinationId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Trip [ADMIN]",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/trips/5", "host": ["{{base_url}}"], "path": ["api","trips","5"] }
+          }
+        },
+        {
+          "name": "Get Full Trip [HATEOAS]",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/trips/1/full", "host": ["{{base_url}}"], "path": ["api","trips","1","full"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Flights",
+      "item": [
+        {
+          "name": "Get All Flights",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/flights", "host": ["{{base_url}}"], "path": ["api","flights"] }
+          }
+        },
+        {
+          "name": "Get Flights - Filter by departure city",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/flights?departure=New York",
+              "host": ["{{base_url}}"], "path": ["api","flights"],
+              "query": [{ "key": "departure", "value": "New York" }]
+            }
+          }
+        },
+        {
+          "name": "Get Flights - Filter by arrival city",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/flights?arrival=Paris",
+              "host": ["{{base_url}}"], "path": ["api","flights"],
+              "query": [{ "key": "arrival", "value": "Paris" }]
+            }
+          }
+        },
+        {
+          "name": "Get Flight by ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/flights/1", "host": ["{{base_url}}"], "path": ["api","flights","1"] }
+          }
+        },
+        {
+          "name": "Create Flight [ADMIN/AGENT]",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{agent_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": { "raw": "{{base_url}}/api/flights", "host": ["{{base_url}}"], "path": ["api","flights"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"airline\": \"Iberia\",\n  \"departureCity\": \"Madrid\",\n  \"arrivalCity\": \"Barcelona\",\n  \"departureTime\": \"2026-10-01T09:00:00\",\n  \"availableSeats\": 35,\n  \"tripId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Flight [ADMIN/AGENT]",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{agent_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": { "raw": "{{base_url}}/api/flights/1", "host": ["{{base_url}}"], "path": ["api","flights","1"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"airline\": \"Air France\",\n  \"departureCity\": \"New York\",\n  \"arrivalCity\": \"Paris\",\n  \"departureTime\": \"2026-06-01T08:00:00\",\n  \"availableSeats\": 45,\n  \"tripId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Flight [ADMIN]",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/flights/7", "host": ["{{base_url}}"], "path": ["api","flights","7"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Hotels",
+      "item": [
+        {
+          "name": "Get All Hotels",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/hotels", "host": ["{{base_url}}"], "path": ["api","hotels"] }
+          }
+        },
+        {
+          "name": "Get Hotels - Filter by city",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/hotels?city=Paris",
+              "host": ["{{base_url}}"], "path": ["api","hotels"],
+              "query": [{ "key": "city", "value": "Paris" }]
+            }
+          }
+        },
+        {
+          "name": "Get Hotels - Filter by stars",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/hotels?stars=5",
+              "host": ["{{base_url}}"], "path": ["api","hotels"],
+              "query": [{ "key": "stars", "value": "5" }]
+            }
+          }
+        },
+        {
+          "name": "Get Hotel by ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/hotels/1", "host": ["{{base_url}}"], "path": ["api","hotels","1"] }
+          }
+        },
+        {
+          "name": "Create Hotel [ADMIN/AGENT]",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{agent_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": { "raw": "{{base_url}}/api/hotels", "host": ["{{base_url}}"], "path": ["api","hotels"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Hotel Eiffel Prestige\",\n  \"city\": \"Paris\",\n  \"stars\": 5,\n  \"pricePerNight\": 400.00,\n  \"tripId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Hotel [ADMIN/AGENT]",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{agent_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": { "raw": "{{base_url}}/api/hotels/1", "host": ["{{base_url}}"], "path": ["api","hotels","1"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Hotel Le Marais\",\n  \"city\": \"Paris\",\n  \"stars\": 4,\n  \"pricePerNight\": 190.00,\n  \"tripId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Hotel [ADMIN]",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/hotels/5", "host": ["{{base_url}}"], "path": ["api","hotels","5"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Passengers",
+      "item": [
+        {
+          "name": "Get All Passengers [ADMIN/AGENT]",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{agent_token}}" }],
+            "url": { "raw": "{{base_url}}/api/passengers", "host": ["{{base_url}}"], "path": ["api","passengers"] }
+          }
+        },
+        {
+          "name": "Get Passenger by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{customer_token}}" }],
+            "url": { "raw": "{{base_url}}/api/passengers/1", "host": ["{{base_url}}"], "path": ["api","passengers","1"] }
+          }
+        },
+        {
+          "name": "Create Passenger [ADMIN/CUSTOMER]",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{customer_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": { "raw": "{{base_url}}/api/passengers", "host": ["{{base_url}}"], "path": ["api","passengers"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Bob\",\n  \"lastName\": \"Martin\",\n  \"passportNumber\": \"P99887766\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Passenger [ADMIN]",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": { "raw": "{{base_url}}/api/passengers/1", "host": ["{{base_url}}"], "path": ["api","passengers","1"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"John\",\n  \"lastName\": \"Doe\",\n  \"passportNumber\": \"P12345678\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Passenger [ADMIN]",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/passengers/4", "host": ["{{base_url}}"], "path": ["api","passengers","4"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Bookings",
+      "item": [
+        {
+          "name": "Get All Bookings [ADMIN/AGENT]",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{agent_token}}" }],
+            "url": { "raw": "{{base_url}}/api/bookings", "host": ["{{base_url}}"], "path": ["api","bookings"] }
+          }
+        },
+        {
+          "name": "Get Bookings - Filter by status",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{agent_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/bookings?status=CONFIRMED",
+              "host": ["{{base_url}}"], "path": ["api","bookings"],
+              "query": [{ "key": "status", "value": "CONFIRMED" }]
+            }
+          }
+        },
+        {
+          "name": "Get Bookings - Filter by userId",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{agent_token}}" }],
+            "url": {
+              "raw": "{{base_url}}/api/bookings?userId=2",
+              "host": ["{{base_url}}"], "path": ["api","bookings"],
+              "query": [{ "key": "userId", "value": "2" }]
+            }
+          }
+        },
+        {
+          "name": "Get Booking by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{customer_token}}" }],
+            "url": { "raw": "{{base_url}}/api/bookings/1", "host": ["{{base_url}}"], "path": ["api","bookings","1"] }
+          }
+        },
+        {
+          "name": "Create Booking [ADMIN/CUSTOMER]",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{customer_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": { "raw": "{{base_url}}/api/bookings", "host": ["{{base_url}}"], "path": ["api","bookings"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 2,\n  \"tripId\": 4,\n  \"totalPrice\": 1100.00,\n  \"passengerIds\": [1, 2]\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Booking [ADMIN/AGENT]",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{agent_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": { "raw": "{{base_url}}/api/bookings/2", "host": ["{{base_url}}"], "path": ["api","bookings","2"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 2,\n  \"tripId\": 2,\n  \"totalPrice\": 980.00,\n  \"status\": \"CONFIRMED\",\n  \"passengerIds\": [3]\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Booking [ADMIN]",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/bookings/4", "host": ["{{base_url}}"], "path": ["api","bookings","4"] }
+          }
+        },
+        {
+          "name": "Get Booking Details [HATEOAS - aggregation]",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{customer_token}}" }],
+            "url": { "raw": "{{base_url}}/api/bookings/1/details", "host": ["{{base_url}}"], "path": ["api","bookings","1","details"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Payments",
+      "item": [
+        {
+          "name": "Get All Payments [ADMIN]",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/payments", "host": ["{{base_url}}"], "path": ["api","payments"] }
+          }
+        },
+        {
+          "name": "Get Payment by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{customer_token}}" }],
+            "url": { "raw": "{{base_url}}/api/payments/1", "host": ["{{base_url}}"], "path": ["api","payments","1"] }
+          }
+        },
+        {
+          "name": "Create Payment [ADMIN/CUSTOMER]",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{customer_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": { "raw": "{{base_url}}/api/payments", "host": ["{{base_url}}"], "path": ["api","payments"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 1100.00,\n  \"method\": \"CREDIT_CARD\",\n  \"bookingId\": 4\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Payment [ADMIN]",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": { "raw": "{{base_url}}/api/payments/2", "host": ["{{base_url}}"], "path": ["api","payments","2"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 980.00,\n  \"method\": \"PAYPAL\",\n  \"status\": \"COMPLETED\",\n  \"bookingId\": 2\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Payment [ADMIN]",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/payments/4", "host": ["{{base_url}}"], "path": ["api","payments","4"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Reviews",
+      "item": [
+        {
+          "name": "Get All Reviews",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/reviews", "host": ["{{base_url}}"], "path": ["api","reviews"] }
+          }
+        },
+        {
+          "name": "Get Review by ID",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/reviews/1", "host": ["{{base_url}}"], "path": ["api","reviews","1"] }
+          }
+        },
+        {
+          "name": "Create Review [ADMIN/CUSTOMER]",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{customer_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": { "raw": "{{base_url}}/api/reviews", "host": ["{{base_url}}"], "path": ["api","reviews"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 5,\n  \"comment\": \"Fantastic experience in Tokyo!\",\n  \"userId\": 2,\n  \"tripId\": 3\n}"
+            }
+          }
+        },
+        {
+          "name": "Update Review [ADMIN/CUSTOMER]",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{customer_token}}" },
+              { "key": "Content-Type",   "value": "application/json" }
+            ],
+            "url": { "raw": "{{base_url}}/api/reviews/1", "host": ["{{base_url}}"], "path": ["api","reviews","1"] },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 4,\n  \"comment\": \"Wonderful trip to Paris, highly recommend!\",\n  \"userId\": 2,\n  \"tripId\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Review [ADMIN]",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/reviews/3", "host": ["{{base_url}}"], "path": ["api","reviews","3"] }
+          }
+        }
+      ]
+    }
+
+  ]
+}
