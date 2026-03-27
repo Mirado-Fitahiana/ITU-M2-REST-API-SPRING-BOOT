@@ -40,6 +40,7 @@ public class OpenApiConfig {
                                 .name("Travel Booking Team")
                                 .email("contact@travel.com")))
                 .servers(List.of(
+                        new Server().url("https://itu-m2-rest-api-spring-boot.onrender.com").description("Production (Render)"),
                         new Server().url("http://localhost:8080").description("Local development")))
                 .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
                 .components(new Components()
