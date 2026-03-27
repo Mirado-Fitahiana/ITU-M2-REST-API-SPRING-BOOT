@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: itu-m2-rest-api-spring-boot
+    env: java
+    plan: free
+    buildCommand: chmod +x mvnw && ./mvnw clean package -DskipTests
+    startCommand: java -jar target/*.jar
