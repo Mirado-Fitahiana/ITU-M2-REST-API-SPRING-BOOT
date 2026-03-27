@@ -71,3 +71,15 @@ INSERT INTO payments (id, amount, method, status, payment_date, booking_id) VALU
 INSERT INTO reviews (id, rating, comment, user_id, trip_id) VALUES
 (1, 5, 'Absolutely wonderful trip to Paris!',    2, 1),
 (2, 4, 'Rome was amazing, history everywhere.',  1, 3);
+
+-- Reset sequences so auto-increment starts after seeded data
+ALTER TABLE users       ALTER COLUMN id RESTART WITH 4;
+ALTER TABLE roles       ALTER COLUMN id RESTART WITH 4;
+ALTER TABLE destinations ALTER COLUMN id RESTART WITH 4;
+ALTER TABLE trips       ALTER COLUMN id RESTART WITH 5;
+ALTER TABLE flights     ALTER COLUMN id RESTART WITH 8;
+ALTER TABLE hotels      ALTER COLUMN id RESTART WITH 5;
+ALTER TABLE passengers  ALTER COLUMN id RESTART WITH 4;
+ALTER TABLE bookings    ALTER COLUMN id RESTART WITH 4;
+ALTER TABLE payments    ALTER COLUMN id RESTART WITH 4;
+ALTER TABLE reviews     ALTER COLUMN id RESTART WITH 3;
